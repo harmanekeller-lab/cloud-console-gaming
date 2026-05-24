@@ -1,0 +1,42 @@
+# GPU Worker image — PCSX2 (PS2) + RPCS3 (PS3) + Xvfb + VirtualGL + GStreamer
+# Base on NVIDIA CUDA runtime so RunPod / Vast.ai mounts the GPU drivers cleanly.
+FROM nvidia/cuda:12.4.1-runtime-ubuntu22.04
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    DISPLAY=:99 \
+    VGL_DISPLAY=:99
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        xvfb x11-utils mesa-utils \
+        libgl1 libglu1-mesa libvulkan1 vulkan-tools \
+        virtualgl \
+        gstreamer1.0-tools gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
+        gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav \
+        gstreamer1.0-nice \
+        pulseaudio alsa-utils \
+        wget curl ca-certificates fuse libfuse2 \
+        python3 python3-pip python3-venv \
+        software-properties-common && \
+    rm -rf /var/lib/apt/lists/*
+
+# PCSX2 (AppImage)
+RUN wget -O /usr/local/bin/pcsx2.AppImage \
+        https://github.com/PCSX2/pcsx2/releases/latest/download/pcsx2-Qt-linux-AppImage-x64.AppImage && \
+    chmod +x /usr/local/bin/pcsx2.AppImage
+
+# RPCS3 (AppImage)
+RUN wget -O /usr/local/bin/rpcs3.AppImage \
+        https://rpcs3.net/latest-appimage && \
+    chmod +x /usr/local/bin/rpcs3.AppImage
+
+# Worker control agent (Python) — receives session start over WS, launches emulator,
+# pipes Xvfb framebuffer through GStreamer → WebRTC to the FastAPI signaling server.
+COPY worker_agent.py /opt/worker_agent.py
+RUN pip install --no-cache-dir aiortc==1.9.0 websockets==13.1 httpx==0.27.2
+
+EXPOSE 8001/tcp
+EXPOSE 5000-5100/udp
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+CMD ["/entrypoint.sh"]
