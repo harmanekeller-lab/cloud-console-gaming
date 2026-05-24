@@ -9,7 +9,7 @@
     "build.dev": "vite build --mode développement",
     "aperçu": "vite preview",
     "start": "vite preview"
-  }
+  }, 
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.25.5",
     "@hookform/resolvers": "^5.2.2",
