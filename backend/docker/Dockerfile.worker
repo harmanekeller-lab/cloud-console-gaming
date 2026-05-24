@@ -27,9 +27,12 @@ RUN ARCH=$(dpkg --print-architecture) && \
     apt-get update && apt-get install -y --no-install-recommends /tmp/virtualgl.deb && \
     rm -f /tmp/virtualgl.deb && rm -rf /var/lib/apt/lists/*
 
-# PCSX2 (AppImage)
+# PCSX2 (AppImage) — pinned to a known-good stable release. The "latest/download"
+# alias does not work for PCSX2 because the filename embeds the version string,
+# so we pin the version explicitly and bump it manually when needed.
+ARG PCSX2_VERSION=v2.6.3
 RUN wget -O /usr/local/bin/pcsx2.AppImage \
-        https://github.com/PCSX2/pcsx2/releases/latest/download/pcsx2-Qt-linux-AppImage-x64.AppImage && \
+        "https://github.com/PCSX2/pcsx2/releases/download/${PCSX2_VERSION}/pcsx2-${PCSX2_VERSION}-linux-appimage-x64-Qt.AppImage" && \
     chmod +x /usr/local/bin/pcsx2.AppImage
 
 # RPCS3 (AppImage)
