@@ -14,7 +14,152 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      balances: {
+        Row: {
+          seconds_remaining: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          seconds_remaining?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          seconds_remaining?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      games: {
+        Row: {
+          cover_url: string | null
+          created_at: string
+          id: string
+          name: string
+          platform: Database["public"]["Enums"]["platform"]
+          source_url: string
+          status: Database["public"]["Enums"]["game_status"]
+          user_id: string
+        }
+        Insert: {
+          cover_url?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          platform: Database["public"]["Enums"]["platform"]
+          source_url: string
+          status?: Database["public"]["Enums"]["game_status"]
+          user_id: string
+        }
+        Update: {
+          cover_url?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          platform?: Database["public"]["Enums"]["platform"]
+          source_url?: string
+          status?: Database["public"]["Enums"]["game_status"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          amount_xof: number
+          created_at: string
+          id: string
+          moneroo_ref: string | null
+          status: Database["public"]["Enums"]["payment_status"]
+          ticket_type: Database["public"]["Enums"]["ticket_type"]
+          user_id: string
+        }
+        Insert: {
+          amount_xof: number
+          created_at?: string
+          id?: string
+          moneroo_ref?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          ticket_type: Database["public"]["Enums"]["ticket_type"]
+          user_id: string
+        }
+        Update: {
+          amount_xof?: number
+          created_at?: string
+          id?: string
+          moneroo_ref?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          ticket_type?: Database["public"]["Enums"]["ticket_type"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          free_trial_used: boolean
+          id: string
+          phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          free_trial_used?: boolean
+          id: string
+          phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          free_trial_used?: boolean
+          id?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      sessions: {
+        Row: {
+          ended_at: string | null
+          game_id: string | null
+          id: string
+          last_heartbeat: string
+          seconds_consumed: number
+          started_at: string
+          status: Database["public"]["Enums"]["session_status"]
+          user_id: string
+        }
+        Insert: {
+          ended_at?: string | null
+          game_id?: string | null
+          id?: string
+          last_heartbeat?: string
+          seconds_consumed?: number
+          started_at?: string
+          status?: Database["public"]["Enums"]["session_status"]
+          user_id: string
+        }
+        Update: {
+          ended_at?: string | null
+          game_id?: string | null
+          id?: string
+          last_heartbeat?: string
+          seconds_consumed?: number
+          started_at?: string
+          status?: Database["public"]["Enums"]["session_status"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sessions_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +168,11 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      game_status: "pending" | "downloading" | "ready" | "failed"
+      payment_status: "pending" | "completed" | "failed"
+      platform: "ps2" | "ps3"
+      session_status: "active" | "ended" | "expired"
+      ticket_type: "flash" | "gamer" | "hardcore"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +299,12 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      game_status: ["pending", "downloading", "ready", "failed"],
+      payment_status: ["pending", "completed", "failed"],
+      platform: ["ps2", "ps3"],
+      session_status: ["active", "ended", "expired"],
+      ticket_type: ["flash", "gamer", "hardcore"],
+    },
   },
 } as const
