@@ -35,9 +35,15 @@ RUN wget -O /usr/local/bin/pcsx2.AppImage \
         "https://github.com/PCSX2/pcsx2/releases/download/${PCSX2_VERSION}/pcsx2-${PCSX2_VERSION}-linux-appimage-x64-Qt.AppImage" && \
     chmod +x /usr/local/bin/pcsx2.AppImage
 
-# RPCS3 (AppImage)
-RUN wget -O /usr/local/bin/rpcs3.AppImage \
-        https://rpcs3.net/latest-appimage && \
+# RPCS3 (AppImage) — RPCS3 ships rolling "master" builds (no tagged stable releases)
+# via the rpcs3-binaries-linux repo. The marketing URL https://rpcs3.net/latest-appimage
+# is a browser redirect that wget can't follow reliably, so we query the GitHub Releases
+# API to grab the AppImage asset URL from the latest build and download it directly.
+RUN APPIMAGE_URL=$(curl -fsSL https://api.github.com/repos/RPCS3/rpcs3-binaries-linux/releases/latest \
+        | grep -oE '"browser_download_url":\s*"[^"]+\.AppImage"' \
+        | head -n1 | cut -d'"' -f4) && \
+    echo "Downloading RPCS3 from: $APPIMAGE_URL" && \
+    wget -O /usr/local/bin/rpcs3.AppImage "$APPIMAGE_URL" && \
     chmod +x /usr/local/bin/rpcs3.AppImage
 
 # Worker control agent (Python) — receives session start over WS, launches emulator,
