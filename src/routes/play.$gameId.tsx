@@ -85,7 +85,7 @@ function PlayPage() {
         dcRef.current = dc;
 
         // Connect signaling WebSocket
-        const ws = new WebSocket(api.wsSignalingUrl(sessionId));
+        const ws = new WebSocket(api.wsSignalingUrl(sessionId!));
         wsRef.current = ws;
 
         ws.onopen = async () => {
