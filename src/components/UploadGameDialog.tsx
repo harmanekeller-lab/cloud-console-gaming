@@ -33,8 +33,8 @@ export function UploadGameDialog({ userId, onUploaded }: { userId: string; onUpl
 
   return (
     <>
-      <button onClick={() => setOpen(true)} className="flex items-center gap-2 px-4 py-2 border border-border rounded text-sm font-medium hover:bg-surface transition-colors">
-        <span>+</span> Upload ISO/PKG
+      <button data-upload-trigger onClick={() => setOpen(true)} className="sr-only">
+        Upload ISO/PKG
       </button>
       {open && (
         <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm grid place-items-center p-6" onClick={() => setOpen(false)}>
