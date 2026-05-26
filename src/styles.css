@@ -29,57 +29,71 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
   --color-success: var(--success);
+  --color-neon: var(--neon);
+  --color-neon-soft: var(--neon-soft);
   --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --shadow-neon: 0 0 12px var(--neon-soft), 0 0 32px color-mix(in oklab, var(--neon) 30%, transparent);
+  --gradient-neon: linear-gradient(135deg, var(--neon) 0%, hsl(217 91% 60%) 100%);
 }
 
 :root {
   --radius: 0.5rem;
-  /* Console Engineering palette */
-  --background: hsl(222 47% 4%);
-  --foreground: hsl(210 40% 98%);
-  --surface: hsl(222 47% 7%);
-  --card: hsl(222 47% 7%);
-  --card-foreground: hsl(210 40% 98%);
-  --popover: hsl(222 47% 7%);
-  --popover-foreground: hsl(210 40% 98%);
-  --primary: hsl(217 91% 60%);
-  --primary-foreground: hsl(0 0% 100%);
-  --secondary: hsl(217 20% 14%);
-  --secondary-foreground: hsl(210 40% 98%);
-  --muted: hsl(217 20% 14%);
-  --muted-foreground: hsl(215 20% 65%);
-  --accent: hsl(217 91% 60%);
-  --accent-foreground: hsl(0 0% 100%);
+  /* Virtual Console Engine — deep navy + neon cyan */
+  --background: hsl(222 60% 4%);
+  --foreground: hsl(195 100% 96%);
+  --surface: hsl(222 55% 7%);
+  --surface-2: hsl(222 50% 10%);
+  --card: hsl(222 55% 7%);
+  --card-foreground: hsl(195 100% 96%);
+  --popover: hsl(222 55% 8%);
+  --popover-foreground: hsl(195 100% 96%);
+  --primary: hsl(193 100% 55%);
+  --primary-foreground: hsl(222 60% 4%);
+  --secondary: hsl(222 40% 14%);
+  --secondary-foreground: hsl(195 100% 96%);
+  --muted: hsl(222 40% 14%);
+  --muted-foreground: hsl(215 25% 65%);
+  --accent: hsl(193 100% 55%);
+  --accent-foreground: hsl(222 60% 4%);
   --destructive: hsl(0 72% 51%);
   --destructive-foreground: hsl(210 40% 98%);
-  --border: hsl(217 20% 20%);
-  --input: hsl(217 20% 14%);
-  --ring: hsl(217 91% 60%);
-  --success: hsl(152 65% 50%);
+  --border: hsl(217 40% 18%);
+  --input: hsl(222 40% 14%);
+  --ring: hsl(193 100% 55%);
+  --success: hsl(152 80% 50%);
+  --neon: hsl(193 100% 60%);
+  --neon-soft: hsl(193 100% 60% / 0.4);
 }
 
-.dark {
-  --background: hsl(222 47% 4%);
-  --foreground: hsl(210 40% 98%);
-}
+.dark { color-scheme: dark; }
 
 @layer base {
   * { border-color: var(--color-border); }
   html, body { background-color: var(--color-background); color: var(--color-foreground); }
-  body { font-family: var(--font-display); font-feature-settings: "ss01", "cv11"; }
+  body {
+    font-family: var(--font-display);
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% -10%, hsl(193 100% 30% / 0.18), transparent 70%),
+      radial-gradient(ellipse 60% 40% at 100% 100%, hsl(217 91% 40% / 0.12), transparent 70%);
+    background-attachment: fixed;
+  }
   .font-mono { font-family: var(--font-mono); }
 }
 
-@keyframes slide-up {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+/* utility classes */
+.neon-text { color: var(--neon); text-shadow: 0 0 8px var(--neon-soft), 0 0 24px var(--neon-soft); }
+.neon-border { border: 1px solid color-mix(in oklab, var(--neon) 40%, transparent); box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--neon) 15%, transparent), 0 0 24px color-mix(in oklab, var(--neon) 12%, transparent); }
+.panel { background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid var(--border); border-radius: 0.75rem; }
+.panel-neon { background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%); border: 1px solid color-mix(in oklab, var(--neon) 30%, transparent); border-radius: 0.75rem; box-shadow: 0 0 0 1px color-mix(in oklab, var(--neon) 8%, transparent), 0 8px 40px -12px color-mix(in oklab, var(--neon) 25%, transparent); }
+
+@keyframes slide-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 .animate-in { animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
 
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 hsl(152 65% 50% / 0.5); }
-  50% { box-shadow: 0 0 12px 4px hsl(152 65% 50% / 0.3); }
-}
+@keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 0 0 hsl(152 80% 50% / 0.6); } 50% { box-shadow: 0 0 12px 4px hsl(152 80% 50% / 0.3); } }
 .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+
+@keyframes neon-pulse { 0%, 100% { opacity: 1; filter: drop-shadow(0 0 6px var(--neon-soft)); } 50% { opacity: 0.85; filter: drop-shadow(0 0 14px var(--neon)); } }
+.neon-pulse { animation: neon-pulse 2.4s ease-in-out infinite; }
