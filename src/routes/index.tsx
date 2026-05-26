@@ -162,7 +162,7 @@ function Dashboard() {
                   </button>
                 </div>
               </div>
-              <div className="hidden"><UploadGameDialog userId={user.id} onUploaded={load} /></div>
+              <UploadGameDialog userId={user.id} onUploaded={load} />
             </section>
 
             <LiveSessionPanel />
