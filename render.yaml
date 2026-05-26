@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: cloud-console-gaming
+    runtime: python
+    plan: free
+    region: frankfurt
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.5
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_JWT_SECRET
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE
+        sync: false
+      - key: RUNPOD_API_KEY
+        sync: false
+      - key: RUNPOD_TEMPLATE_ID
+        sync: false
+      - key: RUNPOD_GPU_TYPE
+        sync: false
+      - key: MONEROO_WEBHOOK_SECRET
+        sync: false
+      - key: ORIGINS
+        value: https://retro-cloud-hub.lovable.app,https://id-preview--e7bc8934-f174-4996-a3e2-bb08d2ea4cec.lovable.app
